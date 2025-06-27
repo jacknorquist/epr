@@ -1,1 +1,26 @@
-python-dotenv>=1.0.0
+# Core web & serving
+fastapi
+uvicorn[standard]
+
+# Crawling & HTTP
+requests
+
+# PDF → text
+pdfminer.six
+markdownify
+
+# Data wrangling
+pandas
+
+# Database driver & vector helper
+psycopg2-binary
+pgvector
+
+# Embeddings & LLM
+openai
+
+# Env-file support
+python-dotenv
+
+# (optional) Playwright if you need headless browser crawling later
+# playwright==1.44.0
