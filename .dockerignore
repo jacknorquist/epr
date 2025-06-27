@@ -1,0 +1,30 @@
+# ─ Runtime volumes ─
+pgdata/
+data/
+
+# ─ Python artefacts ─
+__pycache__/
+*.pyc
+*.pyo
+
+# ─ IDE / logs ─
+.vscode/
+.idea/
+*.log
+*.tmp
+
+# ─ Local virtual-envs ─
+.venv/
+env/
+venv/
+
+# ─ Git ─
+.git/
+.gitignore
+
+# ─ OS cruft ─
+.DS_Store
+Thumbs.db
+
+# ─ Secrets ─
+.env
