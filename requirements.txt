@@ -22,5 +22,9 @@ openai
 # Env-file support
 python-dotenv
 
+openai
+
+pdfminer.six
+markdownify
 # (optional) Playwright if you need headless browser crawling later
 # playwright==1.44.0
