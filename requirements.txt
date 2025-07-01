@@ -26,5 +26,8 @@ openai
 
 pdfminer.six
 markdownify
+
+camelot-py[cv]
+ghostscript
 # (optional) Playwright if you need headless browser crawling later
 # playwright==1.44.0
