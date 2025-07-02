@@ -5,7 +5,8 @@ from datetime import date
 from pathlib import Path
 
 STATE = sys.argv[1]
-FEEFILE = Path("data/raw/or/fee.py")
+FEEFILE = Path("/code/data/raw/OR/fee.py")
+
 
 # 1. Load combined_data_full list
 spec = {}
@@ -46,29 +47,40 @@ cur.execute(
 # 4. Prepare table
 cur.execute("""
   CREATE TABLE IF NOT EXISTS or_fee (
-    material_class     TEXT,
-    covered_material   TEXT,
-    material_type      TEXT,
-    rate_cents_lb_low  NUMERIC,
-    rate_cents_lb_high NUMERIC,
-    eff_date           DATE,
-    doc_id             UUID REFERENCES docs(doc_id)
+    material_class      TEXT,
+    covered_material    TEXT,
+    material_type       TEXT,
+    base_fee_low        NUMERIC,
+    sim_low             NUMERIC,
+    disposal_low        NUMERIC,
+    rate_cents_lb_low   NUMERIC,
+    base_fee_high       NUMERIC,
+    sim_high            NUMERIC,
+    disposal_high       NUMERIC,
+    rate_cents_lb_high  NUMERIC,
+    eff_date            DATE,
+    doc_id              UUID REFERENCES docs(doc_id)
   );
   DELETE FROM or_fee WHERE doc_id = %s;
 """, (doc_id,))
+
 
 # 5. Insert rows
 for row in fee_df.itertuples(index=False):
     cur.execute("""
         INSERT INTO or_fee (
           material_class, covered_material, material_type,
-          rate_cents_lb_low, rate_cents_lb_high, eff_date, doc_id
-        ) VALUES (%s,%s,%s,%s,%s,%s,%s)
+          base_fee_low, sim_low, disposal_low, rate_cents_lb_low,
+          base_fee_high, sim_high, disposal_high, rate_cents_lb_high,
+          eff_date, doc_id
+        ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
     """, (
         row.material_class, row.covered_material, row.material_type,
-        row.rate_cents_lb_low, row.rate_cents_lb_high,
+        row.base_fee_low, row.sim_low, row.disposal_low, row.rate_cents_lb_low,
+        row.base_fee_high, row.sim_high, row.disposal_high, row.rate_cents_lb_high,
         date.today(), doc_id
     ))
+
 
 conn.commit()
 print(f"✔ Loaded {len(fee_df)} Oregon fee rows from {FEEFILE}")
