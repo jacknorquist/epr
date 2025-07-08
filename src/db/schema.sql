@@ -16,10 +16,32 @@ CREATE TABLE chunks (
 );
 CREATE INDEX ON chunks USING hnsw (emb vector_l2_ops);
 
+DROP TABLE IF EXISTS or_fee CASCADE;
+
 CREATE TABLE or_fee (
-  material_class   INT,
-  rate_cents_lb    NUMERIC,
-  eff_date         DATE,
-  doc_id           UUID REFERENCES docs(doc_id)
+  material_class        TEXT,
+  covered_material      TEXT,
+  material_type         TEXT,
+
+  base_fee_low          NUMERIC,
+  sim_low               NUMERIC,
+  disposal_low          NUMERIC,
+  rate_cents_lb_low     NUMERIC,
+
+  base_fee_high         NUMERIC,
+  sim_high              NUMERIC,
+  disposal_high         NUMERIC,
+  rate_cents_lb_high    NUMERIC,
+
+  eff_date              DATE,
+  doc_id                UUID REFERENCES docs(doc_id),
+
+  embedding             VECTOR(1536)
 );
-CREATE INDEX ON or_fee (material_class);
+
+CREATE INDEX IF NOT EXISTS or_fee_embedding_idx
+  ON or_fee USING ivfflat (embedding vector_cosine_ops)
+  WITH (lists = 100);
+
+CREATE INDEX IF NOT EXISTS or_fee_material_class_idx
+  ON or_fee (material_class);
