@@ -14,6 +14,7 @@ CREATE TABLE chunks (
   text     TEXT,
   emb      VECTOR(3072)
 );
+
 CREATE INDEX ON chunks USING hnsw (emb vector_l2_ops);
 
 DROP TABLE IF EXISTS or_fee CASCADE;
